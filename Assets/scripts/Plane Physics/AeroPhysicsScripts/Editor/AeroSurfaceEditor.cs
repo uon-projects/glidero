@@ -31,6 +31,7 @@ public class AeroSurfaceEditor : Editor
             EditorGUILayout.PropertyField(inputType);
             EditorGUILayout.PropertyField(inputMultiplyer);
         }
+
         EditorGUILayout.PropertyField(aircraft);
         serializedObject.ApplyModifiedProperties();
     }

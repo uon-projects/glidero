@@ -11,7 +11,7 @@ public struct BiVector3
         this.q = torque;
     }
 
-    public static BiVector3 operator+(BiVector3 a, BiVector3 b)
+    public static BiVector3 operator +(BiVector3 a, BiVector3 b)
     {
         return new BiVector3(a.p + b.p, a.q + b.q);
     }

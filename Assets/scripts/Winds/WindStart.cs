@@ -28,9 +28,9 @@ public class WindStart : MonoBehaviour
             aircraft.SetWind(Vector3.zero);
         }
     }
+
     public void Reset()
     {
         timeInWind = 0;
     }
 }
-

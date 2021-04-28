@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Automation : MonoBehaviour
 {
-    [Header("Noob Settings")]
-    public bool angleClamp = true;
+    [Header("Noob Settings")] public bool angleClamp = true;
     public bool autoTurn = true;
     public bool autoCorrect = true;
-    
+
     bool turnStart = false;
     Vector3 turnAngles = Vector3.zero;
 
@@ -18,15 +17,16 @@ public class Automation : MonoBehaviour
         {
             AutoTurner(ref Pitch, ref Yaw, ref Roll);
         }
+
         if (angleClamp)
         {
             AngleClamp();
         }
+
         if (autoCorrect)
         {
             AutoCorrecter(ref Roll);
         }
-        
     }
 
     private void AutoTurner(ref float Pitch, ref float Yaw, ref float Roll)
@@ -40,8 +40,13 @@ public class Automation : MonoBehaviour
                 if (turnAngles.z > 180) turnAngles.z -= 360;
                 turnStart = true;
             }
+
             TurnSmooth(ref Pitch, ref Roll, ref Yaw, turnAngles);
-        } else { turnStart = false; }
+        }
+        else
+        {
+            turnStart = false;
+        }
     }
 
     private void AutoCorrecter(ref float Roll)
@@ -76,7 +81,7 @@ public class Automation : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         if (angles.x > 180) angles.x -= 360;
         if (angles.z > 180) angles.z -= 360;
-        
+
         pitch = -Mathf.InverseLerp(0, 60, Mathf.Abs(angles.z)) / 2;
     }
 }

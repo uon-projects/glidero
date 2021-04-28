@@ -8,14 +8,15 @@ public class StartPad : MonoBehaviour
     public float startStrengthForward;
     public float throttling = 0.1f;
     public float maxSpeed = 80;
-    public HotkeyConfig hotkeys;
 
     public void LaunchPlayer()
     {
         player.GetRB().isKinematic = false;
-        Vector3 finalForce = (player.transform.forward * startStrengthForward) + (player.transform.up * startStrengthUp);
-        Vector3 currentForce = Vector3.zero;
-        for (int i = 0; i < 1 / throttling; i++)
+        var transform1 = player.transform;
+        var finalForce =
+            transform1.forward * startStrengthForward + transform1.up * startStrengthUp;
+        var currentForce = Vector3.zero;
+        for (var i = 0; i < 1 / throttling; i++)
         {
             currentForce = Vector3.Lerp(currentForce, finalForce, throttling);
             StartCoroutine(Launch(currentForce, throttling * i));
@@ -26,7 +27,7 @@ public class StartPad : MonoBehaviour
             }
         }
     }
-    
+
 
     public IEnumerator Launch(Vector3 thrust, float delay)
     {
@@ -41,7 +42,7 @@ public class StartPad : MonoBehaviour
         }
     }
 
-    public IEnumerator SetLaunched()
+    private IEnumerator SetLaunched()
     {
         yield return new WaitForSeconds(1f);
         player.SetLaunched(true);

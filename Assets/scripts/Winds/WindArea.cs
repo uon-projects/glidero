@@ -16,7 +16,7 @@ public class WindArea : MonoBehaviour
             Vector3 fakeGlider = col.transform.position;
             fakeGlider.y = 0;
             float distance = Vector3.Distance(fakeTransform, fakeGlider);
-            float maxDistanceInside = transform.localScale.x/2;    
+            float maxDistanceInside = transform.localScale.x / 2;
             float coefficient = curveSteepness.Evaluate(distance / maxDistanceInside);
             Vector3 wind = Vector3.up * Strength * coefficient;
             aircraft.rb.MovePosition(aircraft.transform.position + wind);
@@ -40,5 +40,4 @@ public class WindArea : MonoBehaviour
             aircraft.SetWind(Vector3.zero);
         }
     }
-
 }

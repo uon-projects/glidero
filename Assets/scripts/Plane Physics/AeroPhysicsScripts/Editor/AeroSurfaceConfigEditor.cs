@@ -53,6 +53,7 @@ public class AeroSurfaceConfigEditor : Editor
         {
             EditorGUILayout.PropertyField(aspectRatio);
         }
+
         serializedObject.ApplyModifiedProperties();
     }
 }

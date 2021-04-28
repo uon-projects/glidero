@@ -26,6 +26,7 @@ public class StartLoadingController : MonoBehaviour
             Vector2 fakePoint = new Vector2(checkingPoints[i].position.x, checkingPoints[i].position.z);
             Vector2 fakeGlider = new Vector2(glider.position.x, glider.position.z);
         }
+
         startTerrain.SetActive(visible);
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(SlowUpdate());

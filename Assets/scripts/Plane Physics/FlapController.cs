@@ -1,6 +1,10 @@
 using UnityEngine;
 
-public enum Side { Right, Left}
+public enum Side
+{
+    Right,
+    Left
+}
 
 public class FlapController : MonoBehaviour
 {
@@ -32,7 +36,7 @@ public class FlapController : MonoBehaviour
     private void Update()
     {
         float goalx = initialRotation.x + flapAngle;
-        float goaly = initialRotation.y + flapAngle/multiplier;
+        float goaly = initialRotation.y + flapAngle / multiplier;
         transform.localRotation = Quaternion.Euler(goalx, goaly, initialRotation.z);
     }
 }

@@ -14,15 +14,17 @@ public class Glider : MonoBehaviour
     public float anglefromground;
     public float energy;
 
-    
-    float roll ;
-    float tilt ;
-    float yaw ;
+
+    float roll;
+    float tilt;
+    float yaw;
+
     private void Start()
     {
         rigidbody = gameObject.GetComponent<Rigidbody>();
         particle.Stop();
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -37,6 +39,7 @@ public class Glider : MonoBehaviour
         //}
         anglefromground = Vector3.Dot(Vector3.forward, transform.forward);
     }
+
     private void FixedUpdate()
     {
         GetInputs();
@@ -46,8 +49,8 @@ public class Glider : MonoBehaviour
         Gravity();
         DragAndOthers();
         TerminalVelocity();
-
     }
+
     private void GetInputs()
     {
         // turn body from forward to backward
@@ -62,12 +65,12 @@ public class Glider : MonoBehaviour
         // if your world.up is | and transform.right is -- then the we havent turned our body
         // and the magnitude of that vector would be exactly 1.414214
         // the dot product is shorter if the angles are farther apart
-        float tip = Vector3.Dot(transform.right, Vector3.up);// or we could just get the dot product
+        float tip = Vector3.Dot(transform.right, Vector3.up); // or we could just get the dot product
         //float tip = (transform.right + Vector3.up).magnitude - 1.414214f;
         yaw -= tip;
         // float tip = Vector3.Dot(transform.right, Vector3.up); <-- find out about that
-
     }
+
     private void AdjustRotations()
     {
         //stall prevention <-- find out
@@ -79,13 +82,15 @@ public class Glider : MonoBehaviour
         //rotate yourself around the anchor point of your forward to the right and left
         if (roll != 0)
             transform.Rotate(transform.forward, roll * Time.deltaTime * -10, Space.World);
-        else { 
-            if (359 > transform.eulerAngles.z && transform.eulerAngles.z > 1){
+        else
+        {
+            if (359 > transform.eulerAngles.z && transform.eulerAngles.z > 1)
+            {
                 roll = (transform.eulerAngles.z < 60) ? 1 : -1;
                 transform.Rotate(transform.forward, roll * Time.deltaTime * -10, Space.World);
             }
         }
-            
+
         //this one is iffy
         if (yaw != 0)
             transform.Rotate(Vector3.up, yaw * Time.deltaTime * 15, Space.World);
@@ -93,29 +98,47 @@ public class Glider : MonoBehaviour
         if (transform.rotation.eulerAngles.z > 60 && transform.rotation.eulerAngles.z < 300)
         {
             int turnAngle;
-            if (transform.rotation.eulerAngles.z < 170) { turnAngle = 60; } else { turnAngle = 300; }
+            if (transform.rotation.eulerAngles.z < 170)
+            {
+                turnAngle = 60;
+            }
+            else
+            {
+                turnAngle = 300;
+            }
+
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, turnAngle);
         }
+
         if (transform.rotation.eulerAngles.x > 70 && transform.rotation.eulerAngles.x < 290)
         {
             int turnAngle;
-            if (transform.rotation.eulerAngles.x < 170) { turnAngle = 60; } else { turnAngle = 300; }
+            if (transform.rotation.eulerAngles.x < 170)
+            {
+                turnAngle = 60;
+            }
+            else
+            {
+                turnAngle = 300;
+            }
+
             transform.eulerAngles = new Vector3(turnAngle, transform.eulerAngles.y, transform.eulerAngles.z);
         }
-
     }
+
     private void Jets()
     {
         UseBlasters();
     }
-    private void Gravity() 
+
+    private void Gravity()
     {
         //GRAVITY
         rigidbody.velocity -= gravity * Vector3.up * Time.deltaTime;
     }
-    void DragAndOthers() 
-    {
 
+    void DragAndOthers()
+    {
         // Vertical (to the glider) velocity truns into horizontal velocity
         // getting just the up velocity relevant to our transform
         Vector3 vertvel = rigidbody.velocity - Vector3.ProjectOnPlane(transform.up, rigidbody.velocity);
@@ -134,10 +157,12 @@ public class Glider : MonoBehaviour
         rigidbody.AddForce(-sideDrag * sideDrag.magnitude * Time.deltaTime);
         rigidbody.velocity += transform.forward * sideDrag.magnitude * Time.deltaTime / 10;
     }
-    void TerminalVelocity() 
+
+    void TerminalVelocity()
     {
         Vector3.ClampMagnitude(rigidbody.velocity, terminalVelocity);
     }
+
     private void OnDrawGizmos()
     {
         if (rigidbody) Debug.DrawLine(transform.position, transform.position + rigidbody.velocity, Color.green);
@@ -149,6 +174,7 @@ public class Glider : MonoBehaviour
         Debug.Log("here");
         StartCoroutine("blast");
     }
+
     public IEnumerator blast()
     {
         particle.Play();
@@ -157,6 +183,7 @@ public class Glider : MonoBehaviour
             rigidbody.AddForce(transform.forward * jetPower);
             yield return new WaitForSeconds(.1f);
         }
+
         particle.Stop();
     }
 }

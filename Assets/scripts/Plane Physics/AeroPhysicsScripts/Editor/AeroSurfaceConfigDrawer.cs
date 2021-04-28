@@ -4,7 +4,6 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(AeroSurfaceConfig), true)]
 public class AeroSurfaceConfigDrawer : PropertyDrawer
 {
-
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         float totalHeight = EditorGUIUtility.singleLineHeight;
@@ -20,13 +19,15 @@ public class AeroSurfaceConfigDrawer : PropertyDrawer
                 {
                     if (prop.name == "m_Script") continue;
                     var subProp = serializedObject.FindProperty(prop.name);
-                    float height = EditorGUI.GetPropertyHeight(subProp, null, true) + EditorGUIUtility.standardVerticalSpacing;
+                    float height = EditorGUI.GetPropertyHeight(subProp, null, true) +
+                                   EditorGUIUtility.standardVerticalSpacing;
                     totalHeight += height;
-                }
-                while (prop.NextVisible(false));
+                } while (prop.NextVisible(false));
             }
+
             totalHeight += EditorGUIUtility.standardVerticalSpacing * 2;
         }
+
         return totalHeight;
     }
 
@@ -35,21 +36,32 @@ public class AeroSurfaceConfigDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
         if (property.objectReferenceValue != null)
         {
-            property.isExpanded = EditorGUI.Foldout(new Rect(position.x, position.y, EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), property.isExpanded, property.displayName, true);
-            EditorGUI.PropertyField(new Rect(position.x + EditorGUIUtility.labelWidth + 2, position.y, position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), property, GUIContent.none, true);
+            property.isExpanded =
+                EditorGUI.Foldout(
+                    new Rect(position.x, position.y, EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight),
+                    property.isExpanded, property.displayName, true);
+            EditorGUI.PropertyField(
+                new Rect(position.x + EditorGUIUtility.labelWidth + 2, position.y,
+                    position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight), property,
+                GUIContent.none, true);
             if (GUI.changed) property.serializedObject.ApplyModifiedProperties();
             if (property.objectReferenceValue == null) EditorGUIUtility.ExitGUI();
 
             if (property.isExpanded)
             {
                 // Draw a background that shows us clearly which fields are part of the ScriptableObject
-                GUI.Box(new Rect(0, position.y + EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing - 1, Screen.width, position.height - EditorGUIUtility.singleLineHeight - EditorGUIUtility.standardVerticalSpacing), "");
+                GUI.Box(
+                    new Rect(0,
+                        position.y + EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing - 1,
+                        Screen.width,
+                        position.height - EditorGUIUtility.singleLineHeight - EditorGUIUtility.standardVerticalSpacing),
+                    "");
 
                 EditorGUI.indentLevel++;
-                var data = (ScriptableObject)property.objectReferenceValue;
+                var data = (ScriptableObject) property.objectReferenceValue;
                 SerializedObject serializedObject = new SerializedObject(data);
 
-                var config = (AeroSurfaceConfig)property.objectReferenceValue;
+                var config = (AeroSurfaceConfig) property.objectReferenceValue;
 
                 // Iterate over all the values and draw them
                 SerializedProperty prop = serializedObject.GetIterator();
@@ -75,11 +87,9 @@ public class AeroSurfaceConfigDrawer : PropertyDrawer
                             EditorGUI.PropertyField(new Rect(position.x, y, position.width, height), prop, true);
                             y += height + EditorGUIUtility.standardVerticalSpacing;
                         }
-
-                        
-                    }
-                    while (prop.NextVisible(false));
+                    } while (prop.NextVisible(false));
                 }
+
                 if (GUI.changed)
                     serializedObject.ApplyModifiedProperties();
 
@@ -88,8 +98,10 @@ public class AeroSurfaceConfigDrawer : PropertyDrawer
         }
         else
         {
-            EditorGUI.ObjectField(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), property, label);
+            EditorGUI.ObjectField(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight),
+                property, label);
         }
+
         property.serializedObject.ApplyModifiedProperties();
         EditorGUI.EndProperty();
     }

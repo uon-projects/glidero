@@ -13,6 +13,7 @@ public class Resetter : MonoBehaviour
     ControlDampener controlDampener;
     Automation automation;
     GliderController gliderController;
+
     private void Start()
     {
         speedBoost = gameObject.GetComponent<SpeedBoost>();
@@ -23,11 +24,13 @@ public class Resetter : MonoBehaviour
         automation = gameObject.GetComponent<Automation>();
         gliderController = gameObject.GetComponent<GliderController>();
     }
+
     public class SpeedBoost : MonoBehaviour
     {
         public int time = 2;
         public float thrustPercent = 1f;
     }
+
     public class StartPad : MonoBehaviour
     {
         public GliderController player;
@@ -39,7 +42,8 @@ public class Resetter : MonoBehaviour
         {
             if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.L))
             {
-                Vector3 finalForce = (player.transform.forward * startStrengthForward) + (player.transform.up * startStrengthUp);
+                Vector3 finalForce = (player.transform.forward * startStrengthForward) +
+                                     (player.transform.up * startStrengthUp);
                 Vector3 currentForce = Vector3.zero;
                 for (int i = 0; i < 1 / throttling; i++)
                 {
@@ -62,6 +66,7 @@ public class Resetter : MonoBehaviour
             startStrengthForward = Mathf.Clamp(startStrengthForward, 0, Mathf.Infinity);
         }
     }
+
     public class WindArea : MonoBehaviour
     {
         public float Strength;
@@ -69,6 +74,7 @@ public class Resetter : MonoBehaviour
         public int curveSteepness = 4;
         public float timeInWind = 0;
     }
+
     public class FlapController : MonoBehaviour
     {
         public float flapAngle = 0;
@@ -78,6 +84,7 @@ public class Resetter : MonoBehaviour
         float multiplier = 10;
         public float smoothSpeed = 0.1f;
     }
+
     public class ControlDampener : MonoBehaviour
     {
         GliderController controller;
@@ -85,15 +92,13 @@ public class Resetter : MonoBehaviour
         public AnimationCurve pitchCurve;
         public AnimationCurve rollCurve;
 
-        [Range(-1, 1)]
-        public float pitchChange;
-        [Range(-1, 1)]
-        public float yawChange;
+        [Range(-1, 1)] public float pitchChange;
+        [Range(-1, 1)] public float yawChange;
     }
+
     public class Automation : MonoBehaviour
     {
-        [Header("Noob Settings")]
-        public bool angleClamp = true;
+        [Header("Noob Settings")] public bool angleClamp = true;
         public bool autoTurn = true;
         public bool autoCorrect = true;
 
@@ -101,39 +106,32 @@ public class Resetter : MonoBehaviour
         bool turnStart = false;
         float turnAltitude = 0;
     }
+
     public class GliderController : MonoBehaviour
     {
-        [Header("Control Parameters")]
-        [SerializeField]
+        [Header("Control Parameters")] [SerializeField]
         List<AeroSurface> controlSurfaces = null;
-        [SerializeField]
-        float rollControlSensitivity = 0.2f;
-        [SerializeField]
-        float pitchControlSensitivity = 0.2f;
-        [SerializeField]
-        float yawControlSensitivity = 0.2f;
+
+        [SerializeField] float rollControlSensitivity = 0.2f;
+        [SerializeField] float pitchControlSensitivity = 0.2f;
+        [SerializeField] float yawControlSensitivity = 0.2f;
         float[] sensitivitySaves = new float[3];
         public FlapController[] flaps;
-        float[] flapAngles = { 0, 0, 0, 0 }; // top to bottom then left to right
-        [Range(0, 1)]
-        public float smoothSpeed = 0.08f;
-        [Range(0, 1)]
-        public float closeSpeed = 0.2f;
+        float[] flapAngles = {0, 0, 0, 0}; // top to bottom then left to right
+        [Range(0, 1)] public float smoothSpeed = 0.08f;
+        [Range(0, 1)] public float closeSpeed = 0.2f;
 
-        [Header("Display Variables")]
-        [Range(-1, 1)]
+        [Header("Display Variables")] [Range(-1, 1)]
         public float Pitch;
-        [Range(-1, 1)]
-        public float Yaw;
-        [Range(-1, 1)]
-        public float Roll;
-        [Range(-1, 1)]
-        public float Flap;
+
+        [Range(-1, 1)] public float Yaw;
+        [Range(-1, 1)] public float Roll;
+        [Range(-1, 1)] public float Flap;
+
         [Tooltip("Toggled by shift, this helps you do the stuffs")]
         public bool noobSettings;
 
-        [Header("Jet Parameters")]
-        public float thrustPercent;
+        [Header("Jet Parameters")] public float thrustPercent;
         AircraftPhysics aircraftPhysics;
         Rigidbody rb;
         public ParticleSystem jet;
@@ -144,8 +142,7 @@ public class Resetter : MonoBehaviour
         public float decreasePerSecondSpeed = 200;
         public float increasePerSecondSpeed = 100;
 
-        [Header("Trails")]
-        public TrailRenderer rightTrail;
+        [Header("Trails")] public TrailRenderer rightTrail;
         public TrailRenderer leftTrail;
         public Material trailNormal;
         public Material trailBoost;
@@ -154,6 +151,7 @@ public class Resetter : MonoBehaviour
         [Header("Dampening Parameters")]
         // dampening
         public float terminalVelocity = 200f;
+
         public ControlDampener controlDampener;
 
         [Header("UI")]
@@ -170,10 +168,10 @@ public class Resetter : MonoBehaviour
         */
         [Header("Brakes")]
         public Transform[] brakes = new Transform[2];
+
         public float minVelocity = 30;
 
-        [Header("Other")]
-        bool dead = false;
+        [Header("Other")] bool dead = false;
         Vector3 startPos;
         Quaternion startRot;
         Vector3 startScale;

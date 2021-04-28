@@ -7,10 +7,8 @@ public class AircraftPhysics : MonoBehaviour
 {
     const float PREDICTION_TIMESTEP_FRACTION = 0.5f;
 
-    [SerializeField] 
-    public float thrust = 0;
-    [SerializeField] 
-    List<AeroSurface> aerodynamicSurfaces = null;
+    [SerializeField] public float thrust = 0;
+    [SerializeField] List<AeroSurface> aerodynamicSurfaces = null;
 
     public Rigidbody rb;
     GliderController controller;
@@ -36,14 +34,15 @@ public class AircraftPhysics : MonoBehaviour
 
     private void FixedUpdate()
     {
-        BiVector3 forceAndTorqueThisFrame = 
+        BiVector3 forceAndTorqueThisFrame =
             CalculateAerodynamicForces(rb.velocity, rb.angularVelocity, wind, 1.2f, rb.worldCenterOfMass);
 
         Vector3 velocityPrediction = PredictVelocity(forceAndTorqueThisFrame.p
-            + transform.forward * thrust * thrustPercent + Physics.gravity * rb.mass);
+                                                     + transform.forward * thrust * thrustPercent +
+                                                     Physics.gravity * rb.mass);
         Vector3 angularVelocityPrediction = PredictAngularVelocity(forceAndTorqueThisFrame.q);
 
-        BiVector3 forceAndTorquePrediction = 
+        BiVector3 forceAndTorquePrediction =
             CalculateAerodynamicForces(velocityPrediction, angularVelocityPrediction, wind, 1.2f, rb.worldCenterOfMass);
 
         currentForceAndTorque = (forceAndTorqueThisFrame + forceAndTorquePrediction) * 0.5f;
@@ -57,17 +56,19 @@ public class AircraftPhysics : MonoBehaviour
         }
     }
 
-    private BiVector3 CalculateAerodynamicForces(Vector3 velocity, Vector3 angularVelocity, Vector3 wind, float airDensity, Vector3 centerOfMass)
+    private BiVector3 CalculateAerodynamicForces(Vector3 velocity, Vector3 angularVelocity, Vector3 wind,
+        float airDensity, Vector3 centerOfMass)
     {
         BiVector3 forceAndTorque = new BiVector3();
         foreach (var surface in aerodynamicSurfaces)
         {
             Vector3 relativePosition = surface.transform.position - centerOfMass;
             forceAndTorque += surface.CalculateForces(-velocity + wind
-                -Vector3.Cross(angularVelocity,
-                relativePosition),
+                                                      - Vector3.Cross(angularVelocity,
+                                                          relativePosition),
                 airDensity, relativePosition);
         }
+
         return forceAndTorque;
     }
 
@@ -86,12 +87,14 @@ public class AircraftPhysics : MonoBehaviour
         angularVelocityChangeInDiagonalSpace.z = torqueInDiagonalSpace.z / rb.inertiaTensor.z;
 
         return rb.angularVelocity + Time.fixedDeltaTime * PREDICTION_TIMESTEP_FRACTION
-            * (inertiaTensorWorldRotation * angularVelocityChangeInDiagonalSpace);
+                                                        * (inertiaTensorWorldRotation *
+                                                           angularVelocityChangeInDiagonalSpace);
     }
 
 #if UNITY_EDITOR
     // For gizmos drawing.
-    public void CalculateCenterOfLift(out Vector3 center, out Vector3 force, Vector3 displayAirVelocity, float displayAirDensity)
+    public void CalculateCenterOfLift(out Vector3 center, out Vector3 force, Vector3 displayAirVelocity,
+        float displayAirDensity)
     {
         Vector3 com;
         BiVector3 forceAndTorque;
@@ -105,7 +108,8 @@ public class AircraftPhysics : MonoBehaviour
         if (rb == null)
         {
             com = GetComponent<Rigidbody>().worldCenterOfMass;
-            forceAndTorque = CalculateAerodynamicForces(-displayAirVelocity, Vector3.zero, Vector3.zero, displayAirDensity, com);
+            forceAndTorque =
+                CalculateAerodynamicForces(-displayAirVelocity, Vector3.zero, Vector3.zero, displayAirDensity, com);
         }
         else
         {
@@ -118,5 +122,3 @@ public class AircraftPhysics : MonoBehaviour
     }
 #endif
 }
-
-

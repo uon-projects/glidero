@@ -9,24 +9,22 @@ public enum State
     Game,
     Pause
 }
+
 public class GameHandler : MonoBehaviour
 {
     public HotkeyConfig hotkeys;
     State state;
     public CinemachineVirtualCamera topDownCamera;
 
-    [Header("display")]
-    public GameObject HUD;
+    [Header("display")] public GameObject HUD;
     public GameObject Menu;
     public GameObject Pause;
     public Fader fadeSystem;
 
-    [Header("glider Init")]
-    public GliderController glider;
+    [Header("glider Init")] public GliderController glider;
     public StartPad launchPad;
 
-    [Header("sounds")]
-    public SoundManager soundManager;
+    [Header("sounds")] public SoundManager soundManager;
     string gameMusic = "inGame2";
     string closeMusic = "inGame1";
 
@@ -57,36 +55,40 @@ public class GameHandler : MonoBehaviour
                 state = State.Game;
                 StartCoroutine(StartGame());
             }
+
             if (Input.GetKeyDown(hotkeys.exitGame))
             {
                 Quit();
             }
+
             if (glider.activateMenuPlease == true)
             {
                 ActivateMenu();
                 glider.activateMenuPlease = false;
             }
         }
-        else if(state == State.Game)
+        else if (state == State.Game)
         {
             if (Input.GetKeyDown(hotkeys.pauseGame))
             {
                 state = State.Pause;
                 PauseGame();
             }
-            if(glider.activateMenuPlease == true)
+
+            if (glider.activateMenuPlease == true)
             {
                 glider.activateMenuPlease = false;
                 state = State.Menu;
                 HUD.SetActive(false);
                 ActivateMenu();
             }
+
             if (Input.GetKeyDown(hotkeys.toggleHUD))
             {
                 HUD.SetActive(!HUD.activeSelf);
             }
         }
-        else if(state == State.Pause)
+        else if (state == State.Pause)
         {
             if (Input.GetKeyDown(hotkeys.pauseGame))
             {
@@ -94,11 +96,13 @@ public class GameHandler : MonoBehaviour
                 state = State.Game;
             }
         }
+
         // start in the "menu" which is the normal scene looking down?
         // If in menu then wait for space to start escape to exit etc
         // If in game listen for esc pause
         // other stuffs?
     }
+
     public void ActivateMenu()
     {
         soundManager.FadeIn("startMusic", 1);
@@ -113,6 +117,7 @@ public class GameHandler : MonoBehaviour
         state = State.Menu;
         glider.Respawn();
     }
+
     IEnumerator StartGame()
     {
         soundManager.FadeOut("startMusic", 1);
@@ -125,11 +130,13 @@ public class GameHandler : MonoBehaviour
         launchPad.LaunchPlayer();
         glider.SetNothing(false);
     }
+
     public void Quit()
     {
         // possibly saving
         Application.Quit();
     }
+
     public void PauseGame()
     {
         Pause.SetActive(true);

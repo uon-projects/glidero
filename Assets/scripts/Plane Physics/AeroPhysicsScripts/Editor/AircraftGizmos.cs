@@ -23,9 +23,9 @@ public static class AircraftGizmos
         }
 
         Vector3 airspeed = new Vector3(0,
-                Mathf.Sin(Mathf.Deg2Rad * settings.displayAngleOfAttack),
-                -Mathf.Cos(Mathf.Deg2Rad * settings.displayAngleOfAttack))
-                * settings.displayAirspeed;
+                               Mathf.Sin(Mathf.Deg2Rad * settings.displayAngleOfAttack),
+                               -Mathf.Cos(Mathf.Deg2Rad * settings.displayAngleOfAttack))
+                           * settings.displayAirspeed;
         Vector3 center;
         Vector3 force;
         phys.CalculateCenterOfLift(out center, out force,
@@ -41,7 +41,9 @@ public static class AircraftGizmos
 
     public static void PrintColor(Color color)
     {
-        Debug.Log("new Color(" + color.r.ToString("F3").Replace(',', '.') + "f, " + color.g.ToString("F3").Replace(',', '.') + "f, " + color.b.ToString("F3").Replace(',', '.') + "f, " + color.a.ToString("F3").Replace(',', '.') + "f);");
+        Debug.Log("new Color(" + color.r.ToString("F3").Replace(',', '.') + "f, " +
+                  color.g.ToString("F3").Replace(',', '.') + "f, " + color.b.ToString("F3").Replace(',', '.') + "f, " +
+                  color.a.ToString("F3").Replace(',', '.') + "f);");
     }
 
 
@@ -57,7 +59,8 @@ public static class AircraftGizmos
         {
             Gizmos.color = Color.clear;
             Gizmos.matrix = surf.transform.localToWorldMatrix;
-            Gizmos.DrawCube(-Vector3.right * 0.25f * surf.Config.chord, new Vector3(surf.Config.chord, 0.1f, surf.Config.span));
+            Gizmos.DrawCube(-Vector3.right * 0.25f * surf.Config.chord,
+                new Vector3(surf.Config.chord, 0.1f, surf.Config.span));
 
             DrawSurface(surf.transform, surf.Config, surf.GetFlapAngle(), surf.IsAtStall);
         }
@@ -69,31 +72,34 @@ public static class AircraftGizmos
             {
                 scale /= rb.mass * Physics.gravity.magnitude;
             }
+
             DrawForces(surf.transform, surf.CurrentLift * scale, surf.CurrentDrag * scale, surf.CurrentTorque * scale);
         }
     }
 
-    private static void DrawSurface(Transform transform, AeroSurfaceConfig config, float flapAngle, bool isAtStall = false)
+    private static void DrawSurface(Transform transform, AeroSurfaceConfig config, float flapAngle,
+        bool isAtStall = false)
     {
         AircraftPhysicsDisplaySettings settings = AircraftPhysicsDisplaySettings.Instance;
         float mainChord = config.chord * (1 - config.flapFraction);
         float flapChord = config.chord * config.flapFraction;
 
         DrawRectangle(transform.position + transform.right * (0.25f * config.chord - 0.5f * mainChord),
-                transform.rotation,
-                config.span,
-                mainChord,
-                isAtStall ? settings.wingAtStallColor : settings.wingColor);
+            transform.rotation,
+            config.span,
+            mainChord,
+            isAtStall ? settings.wingAtStallColor : settings.wingColor);
 
         if (config.flapFraction > 0)
         {
             DrawRectangle(transform.position
-                + transform.right * (0.25f * config.chord - mainChord - 0.02f - 0.5f * flapChord * Mathf.Cos(flapAngle))
-                - transform.up * 0.5f * Mathf.Sin(flapAngle) * flapChord,
-                    transform.rotation * Quaternion.AngleAxis(flapAngle * Mathf.Rad2Deg, Vector3.forward),
-                    config.span,
-                    flapChord,
-                    isAtStall ? settings.flapAtStallColor : settings.flapColor);
+                          + transform.right * (0.25f * config.chord - mainChord - 0.02f -
+                                               0.5f * flapChord * Mathf.Cos(flapAngle))
+                          - transform.up * 0.5f * Mathf.Sin(flapAngle) * flapChord,
+                transform.rotation * Quaternion.AngleAxis(flapAngle * Mathf.Rad2Deg, Vector3.forward),
+                config.span,
+                flapChord,
+                isAtStall ? settings.flapAtStallColor : settings.flapColor);
         }
     }
 
@@ -156,6 +162,7 @@ public static class AircraftGizmos
         {
             vertices[i] = rotation * vertices[i] + position;
         }
+
         return vertices;
     }
 }

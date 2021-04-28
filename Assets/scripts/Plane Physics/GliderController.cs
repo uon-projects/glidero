@@ -5,37 +5,29 @@ using Cinemachine;
 
 public class GliderController : MonoBehaviour
 {
-    [Header("Control Parameters")]
-    [SerializeField]
+    [Header("Control Parameters")] [SerializeField]
     List<AeroSurface> controlSurfaces = null;
-    [SerializeField]
-    float rollControlSensitivity = 0.2f;
-    [SerializeField]
-    float pitchControlSensitivity = 0.2f;
-    [SerializeField]
-    float yawControlSensitivity = 0.2f;
+
+    [SerializeField] float rollControlSensitivity = 0.2f;
+    [SerializeField] float pitchControlSensitivity = 0.2f;
+    [SerializeField] float yawControlSensitivity = 0.2f;
     readonly float[] sensitivitySaves = new float[3];
     public FlapController[] flaps;
-    float[] flapAngles = { 0, 0, 0, 0 }; // top to bottom then left to right
-    [Range(0, 1)]
-    public float flapOpenSpeed = 0.08f;
-    [Range(0, 1)]
-    public float closeSpeed = 0.2f;
+    float[] flapAngles = {0, 0, 0, 0}; // top to bottom then left to right
+    [Range(0, 1)] public float flapOpenSpeed = 0.08f;
+    [Range(0, 1)] public float closeSpeed = 0.2f;
 
-    [Header("Display Variables")]
-    [Range(-1, 1)]
+    [Header("Display Variables")] [Range(-1, 1)]
     public float Pitch;
-    [Range(-1, 1)]
-    public float Yaw;
-    [Range(-1, 1)]
-    public float Roll;
-    [Range(-1, 1)]
-    public float Flap;
+
+    [Range(-1, 1)] public float Yaw;
+    [Range(-1, 1)] public float Roll;
+    [Range(-1, 1)] public float Flap;
+
     [Tooltip("Toggled by shift, this helps you do the stuffs")]
     public bool noobSettings;
 
-    [Header("Jet Parameters")]
-    public float thrustPercent;
+    [Header("Jet Parameters")] public float thrustPercent;
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
     public ParticleSystem jet;
@@ -45,42 +37,36 @@ public class GliderController : MonoBehaviour
     public float jetAmount = 0f;
     public float decreaseTime = 200;
     public float increaseTime = 100;
+
     [Tooltip("Bigger values shrink the impact of velocity (increaseMultiplier = velocity/impactOfVelocity)")]
     public float impactOfVelocity = 5;
 
-    [Header("Trails")]
-    public TrailRenderer rightTrail;
+    [Header("Trails")] public TrailRenderer rightTrail;
     public TrailRenderer leftTrail;
     public Material trailNormal;
     public Material trailBoost;
     public Material trailGround;
 
-    [Header("Dampening Parameters")]
-    public float terminalVelocity = 200f;
+    [Header("Dampening Parameters")] public float terminalVelocity = 200f;
     public ControlDampener controlDampener;
 
-    [Header("Camera")]
-    public CinemachineVirtualCamera followCam;
+    [Header("Camera")] public CinemachineVirtualCamera followCam;
     public CinemachineVirtualCamera followCamRoll;
     public CinemachineVirtualCamera shakeCam;
     public CinemachineVirtualCamera shakeCamRoll;
     CinemachineVirtualCamera currentCam;
 
-    [Header("Brakes")]
-    public Transform[] brakes = new Transform[2];
+    [Header("Brakes")] public Transform[] brakes = new Transform[2];
     public float minVelocity = 30;
 
-    [Header("Balancing")]
-    public PlaneBalanceConfig balanceConfig;
+    [Header("Balancing")] public PlaneBalanceConfig balanceConfig;
     public bool overrideWithLocalValues = false;
     public SettingsConfig settings;
 
-    [Header("Terrain Generation")]
-    public TerrainGenerator terrain;
+    [Header("Terrain Generation")] public TerrainGenerator terrain;
     public HeightMapSettings[] biomes;
 
-    [Header("Other")]
-    public HotkeyConfig hotkeys;
+    [Header("Other")] public HotkeyConfig hotkeys;
     public GameObject startTerrain;
     public GameHandler handler;
     bool dead = false;
@@ -94,14 +80,11 @@ public class GliderController : MonoBehaviour
 
     //("Game loop do not touch")
     bool doNothing = false;
-    [HideInInspector]
-    public bool activateMenuPlease = false;
+    [HideInInspector] public bool activateMenuPlease = false;
 
-    [Header("Sounds")]
-    public SoundManager soundManager;
+    [Header("Sounds")] public SoundManager soundManager;
 
-    [Header("Score")]
-    public int highScore = 0;
+    [Header("Score")] public int highScore = 0;
     public int lastScore = 0;
     public int currentScore = 0;
     int frozenTime = -1;
@@ -174,11 +157,11 @@ public class GliderController : MonoBehaviour
         // Restart
         if (Input.GetKey(hotkeys.respawn))
         {
-            dead=true;
+            dead = true;
         }
 
         // Trails
-        if ((int)rb.velocity.magnitude > 55)
+        if ((int) rb.velocity.magnitude > 55)
         {
             rightTrail.material = trailNormal;
             leftTrail.material = trailNormal;
@@ -195,15 +178,18 @@ public class GliderController : MonoBehaviour
         if (Input.GetKey(hotkeys.useNitro) && !jetEmpty)
         {
             SetThrust(1, 0.1f);
-            jetAmount -= (1/decreaseTime) * Time.deltaTime;
+            jetAmount -= (1 / decreaseTime) * Time.deltaTime;
         }
+
         if (jetAmount <= 0)
         {
             jetEmpty = true;
-        } else if (jetAmount > 0.2f)
+        }
+        else if (jetAmount > 0.2f)
         {
             jetEmpty = false;
         }
+
         if (speeding)
         {
             jet.Play();
@@ -241,7 +227,6 @@ public class GliderController : MonoBehaviour
 
         if (currentCam != cam)
         {
-
             currentCam.Priority = 1;
             cam.Priority = 2;
             currentCam = cam;
@@ -254,7 +239,8 @@ public class GliderController : MonoBehaviour
 
         // Get Distance from Terrain
         float maxSearchDistance = 500;
-        Vector3[] dirs = { transform.forward, -transform.forward, transform.up, -transform.up, transform.right, -transform.right };
+        Vector3[] dirs =
+            {transform.forward, -transform.forward, transform.up, -transform.up, transform.right, -transform.right};
         groundNear = new float[dirs.Length];
         for (int i = 0; i < dirs.Length; i++)
         {
@@ -286,7 +272,8 @@ public class GliderController : MonoBehaviour
 
             if (increaseValue > 0.25f) // Trails
             {
-                jetAmount += increaseValue * (1/(increaseTime*50)) * Time.deltaTime * (rb.velocity.magnitude/impactOfVelocity);
+                jetAmount += increaseValue * (1 / (increaseTime * 50)) * Time.deltaTime *
+                             (rb.velocity.magnitude / impactOfVelocity);
                 rightTrail.emitting = true;
                 leftTrail.emitting = true;
                 rightTrail.material = trailGround;
@@ -329,7 +316,7 @@ public class GliderController : MonoBehaviour
             thrustPercent = 0;
             rb.constraints = RigidbodyConstraints.FreezeAll;
             jet.Stop();
-            int seedVal = (int)Random.Range(-500, 500);
+            int seedVal = (int) Random.Range(-500, 500);
             settings.seed = seedVal;
             HeightMapSettings nextBiome = biomes[Random.Range(0, biomes.Length - 1)];
             terrain.heightMapSettings = nextBiome;
@@ -352,7 +339,6 @@ public class GliderController : MonoBehaviour
             SetControlSurfacesAngles(Pitch, Roll, Yaw, Flap);
             aircraftPhysics.SetThrustPercent(thrustPercent);
         }
-
     }
 
     private void HandleNoob()
@@ -376,8 +362,15 @@ public class GliderController : MonoBehaviour
                     break;
                 case ControlInputType.Roll:
                     surface.SetFlapAngle(roll * rollControlSensitivity * surface.InputMultiplyer);
-                    if (surface.InputMultiplyer > 0) { leftFlaps += roll * rollControlSensitivity * surface.InputMultiplyer * 2; }
-                    else if (surface.InputMultiplyer < 0) { rightFlaps += roll * rollControlSensitivity * surface.InputMultiplyer * 2; }
+                    if (surface.InputMultiplyer > 0)
+                    {
+                        leftFlaps += roll * rollControlSensitivity * surface.InputMultiplyer * 2;
+                    }
+                    else if (surface.InputMultiplyer < 0)
+                    {
+                        rightFlaps += roll * rollControlSensitivity * surface.InputMultiplyer * 2;
+                    }
+
                     break;
                 case ControlInputType.Yaw:
                     surface.SetFlapAngle(yaw * yawControlSensitivity * surface.InputMultiplyer);
@@ -394,8 +387,8 @@ public class GliderController : MonoBehaviour
         {
             for (int i = 0; i < flapAngles.Length; i++)
             {
-
-                flapAngles[i] = Mathf.Lerp(flapAngles[i], i < flapAngles.Length / 2 ? leftFlaps : rightFlaps, closeSpeed);
+                flapAngles[i] = Mathf.Lerp(flapAngles[i], i < flapAngles.Length / 2 ? leftFlaps : rightFlaps,
+                    closeSpeed);
             }
         }
     }
@@ -416,12 +409,14 @@ public class GliderController : MonoBehaviour
         thrustPercent = 0;
     }
 
-    public float GetTerminalVelocity() { return terminalVelocity; }
+    public float GetTerminalVelocity()
+    {
+        return terminalVelocity;
+    }
 
     public void Kill()
     {
         dead = true;
-
     }
 
 
@@ -467,6 +462,7 @@ public class GliderController : MonoBehaviour
                     _ => Mathf.Lerp(flapAngles[i], -90, flapOpenSpeed),
                 };
             }
+
             rollControlSensitivity = sensitivitySaves[0] * 2f;
             pitchControlSensitivity = sensitivitySaves[1] * 2f;
         }
@@ -477,6 +473,7 @@ public class GliderController : MonoBehaviour
                 brake.gameObject.SetActive(false);
                 brake.localRotation = Quaternion.Euler(brake.localEulerAngles.x, brake.localEulerAngles.y, 0);
             }
+
             rollControlSensitivity = sensitivitySaves[0];
             pitchControlSensitivity = sensitivitySaves[1];
         }
@@ -502,15 +499,17 @@ public class GliderController : MonoBehaviour
     {
         return aliveSince;
     }
-    
+
     public bool GetLaunched()
     {
         return launched;
     }
+
     public void SetNothing(bool val)
     {
         doNothing = val;
     }
+
     public IEnumerator AddToScore()
     {
         yield return new WaitForSeconds(1f);
@@ -518,6 +517,7 @@ public class GliderController : MonoBehaviour
         {
             currentScore += 1;
         }
+
         StartCoroutine(AddToScore());
     }
 }

@@ -22,7 +22,7 @@ public class SettingsManager : MonoBehaviour
 
     public void UpdateMapQuality(float value)
     {
-        settings.mapQuality = (int)value;
+        settings.mapQuality = (int) value;
     }
 
     public void UpdateRenderDistance(float value)
