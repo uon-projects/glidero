@@ -193,7 +193,7 @@ public class TerrainChunk
         {
             float sqrDstFromViewerToEdge = bounds.SqrDistance(viewerPosition);
 
-            if (sqrDstFromViewerToEdge < detailLevels[colliderLODIndex].sqrVisibleDstThreshold)
+            if (sqrDstFromViewerToEdge < detailLevels[colliderLODIndex].SqrVisibleDstThreshold)
             {
                 if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
                 {

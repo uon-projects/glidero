@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class TerrainGenerator : MonoBehaviour
@@ -24,11 +23,11 @@ public class TerrainGenerator : MonoBehaviour
     public Transform viewer;
     public Material mapMaterial;
 
-    Vector2 viewerPosition;
-    Vector2 viewerPositionOld;
+    private Vector2 viewerPosition;
+    private Vector2 viewerPositionOld;
 
-    float meshWorldSize;
-    int chunksVisibleInViewDst;
+    private float meshWorldSize;
+    private int chunksVisibleInViewDst;
 
     public SoundManager soundManager;
 
@@ -49,16 +48,17 @@ public class TerrainGenerator : MonoBehaviour
         UpdateVisibleChunks();
     }
 
-    void Update()
+    private void Update()
     {
-        for (int i = 0; i < detailLevels.Length; i++)
+        for (var i = 0; i < detailLevels.Length; i++)
         {
-            int denominator = detailLevels.Length - i;
+            var denominator = detailLevels.Length - i;
             detailLevels[i].visibleDstThreshold = settings.renderDistance / denominator;
             detailLevels[i].lod = Mathf.Clamp(settings.mapQuality - denominator + 1, 0, 4);
         }
 
-        viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+        var position = viewer.position;
+        viewerPosition = new Vector2(position.x, position.z);
 
         if (viewerPosition != viewerPositionOld)
         {
@@ -100,13 +100,9 @@ public class TerrainGenerator : MonoBehaviour
                     }
                     else
                     {
-                        bool flat = false;
-                        if (Mathf.Abs(viewedChunkCoord.y) < 4 && Mathf.Abs(viewedChunkCoord.x) < 4)
-                        {
-                            flat = true;
-                        }
+                        var flat = Mathf.Abs(viewedChunkCoord.y) < 4 && Mathf.Abs(viewedChunkCoord.x) < 4;
 
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings,
+                        var newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings,
                             detailLevels, colliderLODIndex, transform, viewer, mapMaterial, player);
                         terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
                         newChunk.windPrefab = windAreaPrefab;
@@ -155,10 +151,6 @@ public struct LODInfo
     public int lod;
 
     public float visibleDstThreshold;
-
-
-    public float sqrVisibleDstThreshold
-    {
-        get { return visibleDstThreshold * visibleDstThreshold; }
-    }
+    
+    public float SqrVisibleDstThreshold => visibleDstThreshold * visibleDstThreshold;
 }
