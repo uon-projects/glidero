@@ -52,7 +52,6 @@ public class AircraftPhysics : MonoBehaviour
             rb.AddTorque(currentForceAndTorque.q);
 
             rb.AddForce(transform.forward * thrust * thrustPercent);
-            //rb.AddForce(wind);
         }
     }
 

@@ -6114,7 +6114,6 @@ MonoBehaviour:
   startStrengthForward: 50000
   throttling: 0.1
   maxSpeed: 40
-  hotkeys: {fileID: 11400000, guid: bc044c4dd08353b4bb2fb932d54bcb5e, type: 2}
 --- !u!1 &1407583054
 GameObject:
   m_ObjectHideFlags: 0
@@ -8904,7 +8903,7 @@ GameObject:
   - component: {fileID: 1895329607}
   - component: {fileID: 1895329608}
   m_Layer: 0
-  m_Name: gliderman
+  m_Name: GliderObj
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15286,7 +15285,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7129824086897129711, guid: 8f1cc5915d7ac4749ad2775435383af8, type: 3}
       propertyPath: m_Name
-      value: glider (1)
+      value: Glider
       objectReference: {fileID: 0}
     - target: {fileID: 7618377082916479573, guid: 8f1cc5915d7ac4749ad2775435383af8, type: 3}
       propertyPath: m_RootOrder
