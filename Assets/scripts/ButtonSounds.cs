@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonSounds : MonoBehaviour
 {
     // Start is called before the first frame update
-    SoundManager soundManager;
+    private SoundManager soundManager;
 
-    void Start()
+    private void Start()
     {
         soundManager = FindObjectOfType<SoundManager>();
     }

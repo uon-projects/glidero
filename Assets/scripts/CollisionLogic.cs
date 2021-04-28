@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionLogic : MonoBehaviour
@@ -8,9 +6,6 @@ public class CollisionLogic : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            player.Kill();
-        }
+        if (collision.gameObject.CompareTag("Player")) player.Kill();
     }
 }

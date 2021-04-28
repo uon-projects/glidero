@@ -4,40 +4,23 @@ using UnityEngine;
 
 public class Glider : MonoBehaviour
 {
-    Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     public float gravity = 9.8f;
     public float terminalVelocity = 40;
     public int jetPower = 900;
     public float rollSpeed = 2;
     public float tiltSpeed = 2;
     public ParticleSystem particle;
-    public float anglefromground;
-    public float energy;
 
 
-    float roll;
-    float tilt;
-    float yaw;
+    private float roll;
+    private float tilt;
+    private float yaw;
 
     private void Start()
     {
         rigidbody = gameObject.GetComponent<Rigidbody>();
         particle.Stop();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        energy = transform.position.y + rigidbody.velocity.magnitude;
-        //if (Input.GetButtonDown("Fire1"))
-        //{
-        //    Debug.Log("here");
-        //    // find how much this force is equivalent to.
-        //    Instantiate(particle, transform, true);
-        //    particle.Play();
-        //    particle.transform.position += transform.forward;
-        //}
-        anglefromground = Vector3.Dot(Vector3.forward, transform.forward);
     }
 
     private void FixedUpdate()

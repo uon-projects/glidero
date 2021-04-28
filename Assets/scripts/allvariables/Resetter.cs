@@ -53,10 +53,9 @@ public class Resetter : MonoBehaviour
             }
         }
 
-        public IEnumerator Launch(Vector3 thrust, float delay)
+        private IEnumerator Launch(Vector3 thrust, float delay)
         {
             yield return new WaitForSeconds(delay);
-            /*player.GetRB().AddForce(thrust);*/
             player.jetAmount = 0f;
         }
 
@@ -101,10 +100,6 @@ public class Resetter : MonoBehaviour
         [Header("Noob Settings")] public bool angleClamp = true;
         public bool autoTurn = true;
         public bool autoCorrect = true;
-
-        // do these need to be reset, I believe so, how we need setter functions
-        bool turnStart = false;
-        float turnAltitude = 0;
     }
 
     public class GliderController : MonoBehaviour
@@ -170,11 +165,5 @@ public class Resetter : MonoBehaviour
         public Transform[] brakes = new Transform[2];
 
         public float minVelocity = 30;
-
-        [Header("Other")] bool dead = false;
-        Vector3 startPos;
-        Quaternion startRot;
-        Vector3 startScale;
-        Automation automation;
     }
 }

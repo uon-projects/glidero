@@ -87,7 +87,6 @@ public class GliderController : MonoBehaviour
     [Header("Score")] public int highScore = 0;
     public int lastScore = 0;
     public int currentScore = 0;
-    int frozenTime = -1;
 
     private void Start()
     {
