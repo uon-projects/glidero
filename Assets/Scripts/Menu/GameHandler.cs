@@ -28,10 +28,8 @@ public class GameHandler : MonoBehaviour
     string gameMusic = "inGame2";
     string closeMusic = "inGame1";
 
-    void Start()
+    private void Start()
     {
-        // god who knows
-        // possibly do entry credits starting animation
         HUD.SetActive(false);
         Menu.SetActive(true);
         Pause.SetActive(false);
